@@ -13,7 +13,12 @@ import org.biojava3.core.sequence.transcription.Frame;
 
 public class App{
     public static void main( String[] args ) throws Exception{
-    	File dnaFile = new File("src/main/resources/sequence.gb");		
+    	
+    	if(args.length != 2){
+    		System.out.println("Deben ingresarse 2 parámetros: la ruta de archivo gb y la ruta de salida del fasta");
+    	}
+    	
+    	File dnaFile = new File(args[0]);
      
     	LinkedHashMap<String, DNASequence> dnaSequences = GenbankReaderHelper.readGenbankDNASequence( dnaFile );
     	List<ProteinSequence> proteinSequences = new ArrayList<ProteinSequence>();
@@ -22,10 +27,7 @@ public class App{
     				ProteinSequence proteinSequence = sequence.getRNASequence(frame).getProteinSequence();
     				proteinSequences.add(proteinSequence);
     			}
-    	    	System.out.println( sequence.getSequenceAsString() );
     	}
-    	FastaWriterHelper.writeProteinSequence(new File("src/main/resources/fasta-protein.fna"), proteinSequences);
-    	
-    	FastaWriterHelper.writeNucleotideSequence(new File("src/main/resources/fasta-dna.fna"),dnaSequences.values());
+    	FastaWriterHelper.writeProteinSequence(new File(args[1]), proteinSequences);
     }
 }
